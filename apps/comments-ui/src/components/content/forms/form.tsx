@@ -304,10 +304,8 @@ const FormWrapper: React.FC<FormWrapperProps> = ({
     children
 }) => {
     const {member, dispatchAction} = useAppContext();
-
     const memberName = member?.name;
-    const memberExpertise = member?.expertise;
-
+    const memberExpertise = member?.expertise?.split('||')[1] ?? member?.expertise ?? null;
     let openStyles = '';
     if (isOpen) {
         const isReplyToReply = !!openForm?.in_reply_to_snippet;
