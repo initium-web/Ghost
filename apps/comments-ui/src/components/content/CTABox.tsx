@@ -6,7 +6,12 @@ type Props = {
     isPaid: boolean
 };
 const CTABox: React.FC<Props> = ({isFirst, isPaid}) => {
-    const {publication, member, t, commentCount} = useAppContext();
+
+    const {publication, member, t, commentCount, institutional} = useAppContext();
+        
+    if (institutional) {
+        return null;
+    }
 
     const buttonStyle = {
         backgroundColor: "#29A6C9"
