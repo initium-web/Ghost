@@ -73,7 +73,7 @@ function onIframeResize(
 
 const Content = () => {
     const labs = useLabs();
-    const {pagination, comments, commentCount, title, showCount, commentsIsLoading, t, dispatchAction, commentIdToScrollTo, showMissingCommentNotice, isMember, isPaidOnly, hasRequiredTier, isCommentingDisabled} = useAppContext();
+    const {pagination, comments, commentCount, title, showCount, commentsIsLoading, t, dispatchAction, commentIdToScrollTo, showMissingCommentNotice, isMember, isPaidOnly, hasRequiredTier, isCommentingDisabled, institutional} = useAppContext();
     const containerRef = useRef<HTMLDivElement>(null);
 
     const scrollToComment = useCallback((element: HTMLElement, commentId: string) => {
@@ -167,12 +167,12 @@ const Content = () => {
     }, [showMissingCommentNotice, commentsIsLoading]);
 
     const isFirst = pagination?.total === 0;
-    const canComment = isMember && hasRequiredTier && !isCommentingDisabled;
+    const canComment = isMember && hasRequiredTier && !isCommentingDisabled && !institutional;
 
     // Explicit form/box visibility states
     const showMainForm = canComment;
-    const showDisabledBox = !canComment && isCommentingDisabled;
-    const showCtaBox = !canComment && !isCommentingDisabled;
+    const showDisabledBox = !canComment && isCommentingDisabled && !institutional;
+    const showCtaBox = !canComment && !isCommentingDisabled && !institutional;
 
     const commentsComponents = comments.map(comment => <Comment key={comment.id} comment={comment} />);
 
