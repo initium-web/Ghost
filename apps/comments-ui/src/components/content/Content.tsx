@@ -39,15 +39,15 @@ const Content = () => {
     return (
         <>
             <ContentTitle count={commentCount} showCount={showCount} title={title}/>
-            <div>
+            <>
                 {(member && (isPaidMember || !isPaidOnly) && !institutional) ? (
                     <MainForm commentsCount={comments.length} />
                 ) : (
-                    <section className="flex flex-col items-center py-6 sm:px-8 sm:py-10" data-testid="cta-box">
+                    <section className="flex flex-row items-center py-6 sm:py-10 border-t border-b border-brd-soft" data-testid="cta-box">
                         <CTABox isFirst={isFirst} isPaid={isPaidOnly} />
                     </section>
                 )}
-            </div>
+            </>
             {commentCount > 1 && (
                 <div className="z-20 mb-7 mt-3">
                     <span className="flex items-center gap-1.5 text-sm font-medium text-neutral-900 dark:text-neutral-100">
