@@ -10,10 +10,6 @@ import {parseCommentIdFromHash, scrollToElement} from '../../utils/helpers';
 import {useAppContext, useLabs} from '../../app-context';
 import {useCallback, useEffect, useRef} from 'react';
 
-/**
- * Find the iframe element that contains the current window, if any.
- * Returns null if not in an iframe or cross-origin.
- */
 function findContainingIframe(doc: Document): HTMLIFrameElement | null {
     const currentWindow = doc.defaultView;
     if (!currentWindow?.parent || currentWindow.parent === currentWindow) {
@@ -33,13 +29,8 @@ function findContainingIframe(doc: Document): HTMLIFrameElement | null {
     return null;
 }
 
-// Fallback timeout if iframe height doesn't change (content fits exactly)
 const IFRAME_RESIZE_TIMEOUT_MS = 500;
 
-/**
- * Wait for iframe to resize then call callback (on initial load, iframe starts small).
- * Uses ResizeObserver with a fallback timeout.
- */
 function onIframeResize(
     iframe: HTMLIFrameElement,
     callback: () => void
@@ -85,12 +76,8 @@ const Content = () => {
     useEffect(() => {
         const elem = document.getElementById(ROOT_DIV_ID);
 
-        // Check scroll position
         if (elem && window.location.hash === `#ghost-comments`) {
-            // Only scroll if the user didn't scroll by the time we loaded the comments
-            // We could remove this, but if the network connection is slow, we risk having a page jump when the user already started scrolling
             if (window.scrollY === 0) {
-                // This is a bit hacky, but one animation frame is not enough to wait for the iframe height to have changed and the DOM to be updated correctly before scrolling
                 requestAnimationFrame(() => {
                     requestAnimationFrame(() => {
                         elem.scrollIntoView();
@@ -101,10 +88,6 @@ const Content = () => {
     }, []);
 
     useEffect(() => {
-        // Capture the parent window reference once so the handler and cleanup
-        // always use the same object. window.parent becomes null when the
-        // iframe is detached from the DOM, but the captured reference remains
-        // valid for removing the listener.
         const parentWindow = window.parent;
         if (!parentWindow) {
             return;
@@ -169,7 +152,6 @@ const Content = () => {
     const isFirst = pagination?.total === 0;
     const canComment = isMember && hasRequiredTier && !isCommentingDisabled && !institutional;
 
-    // Explicit form/box visibility states
     const showMainForm = canComment;
     const showDisabledBox = !canComment && isCommentingDisabled && !institutional;
     const showCtaBox = !canComment && !isCommentingDisabled && !institutional;
@@ -192,7 +174,7 @@ const Content = () => {
                     </section>
                 )}
                 {showCtaBox && (
-                    <section className="flex flex-col items-center py-6 sm:px-8 sm:py-10" data-testid="cta-box">
+                    <section className="flex flex-row items-center border-b border-t border-brd-soft py-6 sm:py-10" data-testid="cta-box">
                         <CTABox isFirst={isFirst} isPaid={isPaidOnly} />
                     </section>
                 )}
