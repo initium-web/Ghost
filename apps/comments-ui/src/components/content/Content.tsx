@@ -55,7 +55,7 @@ const Content = () => {
                     </span>
                 </div>
             )}
-            <div className={`z-10 transition-opacity duration-100 ${commentsIsLoading ? 'opacity-50' : ''}`} data-testid="comment-elements">
+            <div className={`z-10 transition-opacity duration-100 mt-6 ${commentsIsLoading ? 'opacity-50' : ''}`} data-testid="comment-elements">
                 {commentsComponents}
             </div>
             <Pagination />
