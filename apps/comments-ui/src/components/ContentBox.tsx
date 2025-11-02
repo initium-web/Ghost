@@ -72,7 +72,7 @@ const ContentBox: React.FC<Props> = ({done}) => {
     }, [darkMode]);
 
     const style = {
-        '--gh-accent-color': accentColor ?? 'black',
+        '--gh-accent-color': '#29A6C9',
         paddingTop: 0,
         paddingBottom: 24 // remember to allow for bottom shadow on comment text box
     };
