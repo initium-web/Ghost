@@ -71,6 +71,7 @@ export type CommentsOptions = {
   title: string | null;
   showCount: boolean;
   publication: string;
+  institutional: boolean;
 };
 
 export type EditableAppContext = {

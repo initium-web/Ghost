@@ -161,7 +161,7 @@ export const FormEditor: React.FC<FormEditorProps> = ({
           </button>
         )}
         <button
-          className={`flex w-auto items-center justify-center ${submitSize === 'medium' && 'sm:min-w-[100px]'} ${submitSize === 'small' && 'sm:min-w-[64px]'} h-[40px] rounded-md bg-[var(--gh-accent-color)] px-3 py-2 text-center font-sans text-base font-medium text-white outline-0 transition-colors duration-200 hover:brightness-105 disabled:bg-black/5 disabled:text-neutral-900/30 dark:disabled:bg-white/15 dark:disabled:text-white/35 sm:text-sm`}
+          className={`flex w-auto items-center justify-center ${submitSize === 'medium' && 'sm:min-w-[100px]'} ${submitSize === 'small' && 'sm:min-w-[64px]'} h-[40px] rounded-md bg-[#29A6C9] px-3 py-2 text-center font-sans text-base font-medium text-white outline-0 transition-colors duration-200 hover:brightness-105 disabled:bg-black/5 disabled:text-neutral-900/30 dark:disabled:bg-white/15 dark:disabled:text-white/35 sm:text-sm`}
           data-testid="submit-form-button"
           disabled={!editor || editor.isEmpty}
           type="button"
@@ -345,7 +345,7 @@ const FormWrapper: React.FC<FormWrapperProps> = ({
   const { member, dispatchAction } = useAppContext();
 
   const memberName = member?.name;
-  const memberExpertise = member?.expertise;
+  const memberExpertise = member?.expertise?.split('||')[1] || '';
 
   let openStyles = '';
   if (isOpen) {

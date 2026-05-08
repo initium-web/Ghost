@@ -2,6 +2,7 @@ import EditForm from './forms/edit-form';
 import LikeButton, { DislikeButton } from './buttons/like-button';
 import LikeCount from './buttons/like-count';
 import MoreButton from './buttons/more-button';
+import PlusBadge from './badge/plus-badge';
 import PinnedLabel from './pinned-label';
 import React, { useCallback } from 'react';
 import Replies, { RepliesProps } from './replies';
@@ -326,10 +327,12 @@ const UnpublishedComment: React.FC<React.PropsWithChildren<UnpublishedCommentPro
 
 const MemberExpertise: React.FC<{ comment: Comment }> = ({ comment }) => {
   const { member } = useAppContext();
-  const memberExpertise =
-    member && comment.member && comment.member.uuid === member.uuid
-      ? member.expertise
-      : comment?.member?.expertise;
+  let memberExpertise = '';
+  if (member && comment.member && comment.member.uuid === member.uuid) {
+    memberExpertise = member.expertise?.split('||')[1] || '';
+  } else if (comment?.member?.expertise) {
+    memberExpertise = comment.member.expertise?.split('||')[1] || '';
+  }
 
   if (!memberExpertise) {
     return null;
@@ -408,9 +411,10 @@ const ReplyFormBox: React.FC<ReplyFormBoxProps> = ({ openForm, parent, continueL
 const AuthorName: React.FC<{ comment: Comment }> = ({ comment }) => {
   const { t } = useAppContext();
   const name = getMemberNameFromComment(comment, t);
+  const badge = comment.member?.expertise?.split('||')[0] === '1' ? <PlusBadge /> : null;
   return (
-    <h4 className="font-sans text-base font-bold leading-snug text-neutral-900 dark:text-white/85 sm:text-sm">
-      {name}
+    <h4 className="flex font-sans text-base font-bold leading-snug text-neutral-900 dark:text-white/85 sm:text-sm">
+      {name} {badge}
     </h4>
   );
 };
@@ -423,10 +427,12 @@ type CommentHeaderProps = {
 const CommentHeader: React.FC<CommentHeaderProps> = ({ comment, className = '' }) => {
   const { member } = useAppContext();
   const createdAtRelative = useRelativeTime(comment.created_at);
-  const memberExpertise =
-    member && comment.member && comment.member.uuid === member.uuid
-      ? member.expertise
-      : comment?.member?.expertise;
+  let memberExpertise = '';
+  if (member && comment.member && comment.member.uuid === member.uuid) {
+    memberExpertise = member.expertise?.split('||')[1] || '';
+  } else if (comment?.member?.expertise) {
+    memberExpertise = comment.member.expertise?.split('||')[1] || '';
+  }
 
   const timestampElement = (
     <a

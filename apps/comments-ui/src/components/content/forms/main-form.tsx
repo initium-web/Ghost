@@ -20,6 +20,7 @@ const MainForm: React.FC<Props> = ({ commentsCount }) => {
   );
 
   const { editor, hasContent } = useEditor(editorConfig);
+  const { member } = useAppContext();
 
   const submit = useCallback(
     async ({ html }) => {
@@ -30,9 +31,27 @@ const MainForm: React.FC<Props> = ({ commentsCount }) => {
         html,
       });
 
+      // Keep the stored expertise format in sync with the member's current Plus tier.
+      let rawExpertise = member?.expertise;
+      const booleanBadge = rawExpertise?.split('||')[0] === '1';
+      const textExpertise = rawExpertise?.split('||')[1] || '';
+      let hasPlusTier = false;
+      if (member?.subscriptions?.length) {
+        hasPlusTier = member.subscriptions.some(
+          (subscription: any) => subscription.tier && subscription.tier.name?.toLowerCase().includes('守護'),
+        );
+      }
+      if ((hasPlusTier && !booleanBadge) || (!hasPlusTier && booleanBadge)) {
+        rawExpertise = `${hasPlusTier ? '1' : '0'}||${textExpertise}`;
+      }
+      await dispatchAction('updateMember', {
+        expertise: rawExpertise,
+        name: member?.name,
+      });
+
       editor?.commands.clearContent();
     },
-    [postId, dispatchAction, editor],
+    [postId, dispatchAction, editor, member],
   );
 
   // C keyboard shortcut to focus main form
@@ -116,7 +135,7 @@ const MainForm: React.FC<Props> = ({ commentsCount }) => {
   return (
     <div
       ref={formEl}
-      className="px-3 pb-2 pt-3"
+      className="px-2 pb-2 pt-3"
       data-testid="main-form"
       onBlurCapture={handleBlur}
       onFocusCapture={() => setHasFocusWithin(true)}
